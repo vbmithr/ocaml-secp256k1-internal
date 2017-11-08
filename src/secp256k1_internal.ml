@@ -1,3 +1,45 @@
+module Num = struct
+  type t = Cstruct.buffer
+
+  external copy :
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_copy"
+  external get_bin :
+    Cstruct.buffer -> int -> Cstruct.buffer = "ml_secp256k1_num_get_bin"
+  external set_bin :
+    Cstruct.buffer -> Cstruct.buffer -> int -> unit = "ml_secp256k1_num_set_bin"
+  external mod_inverse :
+    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_mod_inverse"
+  external jacobi :
+    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_num_jacobi"
+  external compare :
+    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_num_cmp"
+  external equal :
+    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_num_eq"
+  external add :
+    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_add"
+  external sub :
+    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_sub"
+  external mul :
+    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_mul"
+  external modulo :
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_num_mod"
+  external shift :
+    Cstruct.buffer -> int -> unit = "ml_secp256k1_num_shift"
+  external is_zero :
+    Cstruct.buffer -> bool = "ml_secp256k1_num_is_zero"
+  external is_one :
+    Cstruct.buffer -> bool = "ml_secp256k1_num_is_one"
+  external is_neg :
+    Cstruct.buffer -> bool = "ml_secp256k1_num_is_neg"
+  external negate :
+    Cstruct.buffer -> unit = "ml_secp256k1_num_negate"
+
+  let get_bin cs =
+    Cstruct.(get_bin (to_bigarray cs) (len cs))
+  let set_bin r cs =
+    Cstruct.(set_bin r (to_bigarray cs) (len cs))
+end
+
 module Field = struct
   type t = Cstruct.buffer
   type storage = Cstruct.buffer
@@ -97,4 +139,6 @@ module Field = struct
       (fun i fe -> Cstruct.(blit (of_bigarray fe) 0 cs (i*size) size)) fes ;
     inv_all_var r cs.buffer nb_fe ;
     Cstruct.memset cs 0
+
+  let compare = cmp_var
 end

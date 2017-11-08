@@ -1,3 +1,58 @@
+module Num : sig
+  type t
+
+  val copy : t -> t -> unit
+  (** Copy a number. *)
+
+  val get_bin : Cstruct.t -> t
+  (** Convert a number's absolute value to a binary big-endian string.
+      There must be enough place. *)
+
+  val set_bin : t -> Cstruct.t -> unit
+  (** Set a number to the value of a binary big-endian string. *)
+
+  val mod_inverse : t -> t -> t -> unit
+  (** Compute a modular inverse. The input must be less than the modulus. *)
+
+  val jacobi : t -> t -> int
+  (** Compute the jacobi symbol (a|b). b must be positive and odd. *)
+
+  val compare : t -> t -> int
+  (** Compare the absolute value of two numbers. *)
+
+  val equal : t -> t -> bool
+  (** Test whether two number are equal (including sign). *)
+
+  val add : t -> t -> t -> unit
+  (** Add two (signed) numbers. *)
+
+  val sub : t -> t -> t -> unit
+  (** Subtract two (signed) numbers. *)
+
+  val mul : t -> t -> t -> unit
+  (** Multiply two (signed) numbers. *)
+
+  val modulo : t -> t -> unit
+  (** Replace a number by its remainder modulo m. M's sign is
+      ignored. The result is a number between 0 and m-1, even if r was
+      negative. *)
+
+  val shift : t -> int -> unit
+  (** Right-shift the passed number by bits bits. *)
+
+  val is_zero : t -> bool
+  (** Check whether a number is zero. *)
+
+  val is_one : t -> bool
+  (** Check whether a number is one. *)
+
+  val is_neg : t -> bool
+  (** Check whether a number is strictly negative. *)
+
+  val negate : t -> unit
+  (** Change a number's sign. *)
+end
+
 (** Field element module.
  *
  *  Field elements can be represented in several ways, but code accessing
@@ -66,7 +121,10 @@ module Field : sig
 
   val cmp_var : t -> t -> int
   (** Compare two field elements. Requires both inputs to be
-     normalized. *)
+      normalized. *)
+
+  val compare : t -> t -> int
+  (** Alias to [cmp_var]. *)
 
   val set_b32 : t -> int32 -> bool
   (** Set a field element equal to 32-byte big endian value. If
