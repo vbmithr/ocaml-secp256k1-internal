@@ -6,9 +6,9 @@
 CAMLprim value ml_secp256k1_fe_const (value r,
                                       value d7, value d6, value d5, value d4,
                                       value d3, value d2, value d1, value d0) {
-    secp256k1_fe fe = SECP256K1_FE_CONST(Int_val(d7), Int_val(d6), Int_val(d5), Int_val(d4),
-                                         Int_val(d3), Int_val(d2), Int_val(d1), Int_val(d0));
-    memcpy(Caml_ba_data_val(r), &fe, 40);
+    secp256k1_fe fe = SECP256K1_FE_CONST(Int64_val(d7), Int64_val(d6), Int64_val(d5), Int64_val(d4),
+                                         Int64_val(d3), Int64_val(d2), Int64_val(d1), Int64_val(d0));
+    memcpy(Caml_ba_data_val(r), &fe, sizeof(secp256k1_fe));
     return Val_unit;
 }
 
@@ -22,9 +22,9 @@ CAMLprim value ml_secp256k1_fe_const_bytecode (value * argv, int argn)
 CAMLprim value ml_secp256k1_fe_storage_const (value r,
                                               value d7, value d6, value d5, value d4,
                                               value d3, value d2, value d1, value d0) {
-    secp256k1_fe fe = SECP256K1_FE_STORAGE_CONST(Int_val(d7), Int_val(d6), Int_val(d5), Int_val(d4),
-                                                 Int_val(d3), Int_val(d2), Int_val(d1), Int_val(d0));
-    memcpy(Caml_ba_data_val(r), &fe, 32);
+    secp256k1_fe_storage fes = SECP256K1_FE_STORAGE_CONST(Int64_val(d7), Int64_val(d6), Int64_val(d5), Int64_val(d4),
+                                                          Int64_val(d3), Int64_val(d2), Int64_val(d1), Int64_val(d0));
+    memcpy(Caml_ba_data_val(r), &fes, sizeof(secp256k1_fe_storage));
     return Val_unit;
 }
 

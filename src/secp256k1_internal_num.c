@@ -1,4 +1,3 @@
-#include <string.h>
 #include <caml/mlvalues.h>
 #include <caml/bigarray.h>
 #include <secp256k1_num.h>

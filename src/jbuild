@@ -4,7 +4,10 @@
  ((name            secp256k1_internal)
   (public_name     secp256k1-internal)
   (libraries       (cstruct))
-  (c_names         (secp256k1_internal_field secp256k1_internal_num))
+  (c_names         (secp256k1_internal_field
+                    secp256k1_internal_num
+                    secp256k1_internal_scalar
+                    ))
   (c_flags         (:include c_flags.sexp))
   (c_library_flags (:include c_library_flags.sexp))))
 

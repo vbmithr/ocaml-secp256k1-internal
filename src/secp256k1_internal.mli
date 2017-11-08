@@ -4,7 +4,7 @@ module Num : sig
   val copy : t -> t -> unit
   (** Copy a number. *)
 
-  val get_bin : Cstruct.t -> t
+  val get_bin : Cstruct.t -> t -> unit
   (** Convert a number's absolute value to a binary big-endian string.
       There must be enough place. *)
 
@@ -12,7 +12,8 @@ module Num : sig
   (** Set a number to the value of a binary big-endian string. *)
 
   val mod_inverse : t -> t -> t -> unit
-  (** Compute a modular inverse. The input must be less than the modulus. *)
+  (** [mod_inverse r a m] Compute a modular inverse. The input must be
+      less than the modulus. *)
 
   val jacobi : t -> t -> int
   (** Compute the jacobi symbol (a|b). b must be positive and odd. *)
@@ -24,13 +25,13 @@ module Num : sig
   (** Test whether two number are equal (including sign). *)
 
   val add : t -> t -> t -> unit
-  (** Add two (signed) numbers. *)
+  (** [add r a b] Add two (signed) numbers. *)
 
   val sub : t -> t -> t -> unit
-  (** Subtract two (signed) numbers. *)
+  (** [sub r a b] Subtract two (signed) numbers. *)
 
   val mul : t -> t -> t -> unit
-  (** Multiply two (signed) numbers. *)
+  (** [mul r a b] Multiply two (signed) numbers. *)
 
   val modulo : t -> t -> unit
   (** Replace a number by its remainder modulo m. M's sign is
@@ -51,6 +52,97 @@ module Num : sig
 
   val negate : t -> unit
   (** Change a number's sign. *)
+end
+
+module Scalar : sig
+  type t
+
+  val const :
+    ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
+    ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
+
+  val clear : t -> unit
+  (** Clear a scalar to prevent the leak of sensitive data. *)
+
+  val get_bits : t -> int -> int -> int
+  (** [get_bits a offset count] Access bits from a scalar. All
+     requested bits must belong to the same 32-bit limb. *)
+
+  val get_bits_var : t -> int -> int -> int
+  (** [get_bits a offset count] Access bits from a scalar. Not
+     constant time. *)
+
+  val set_b32 : t -> Cstruct.t -> bool
+  (** Set a scalar from a big endian byte array. *)
+
+  val set_int : t -> int -> unit
+  (** Set a scalar to an unsigned integer. *)
+
+  val get_b32 : Cstruct.t -> t -> unit
+  (** Convert a scalar to a byte array. *)
+
+  val add : t -> t -> t -> bool
+  (** [add r a b] Add two scalars together (modulo the group
+      order). Returns whether it overflowed. *)
+
+  val cadd_bit : t -> int -> bool -> unit
+  (** [cadd_bit r bit flag] Conditionally add a power of two to a
+      scalar. The result is not allowed to overflow. *)
+
+  val mul : t -> t -> t -> unit
+  (** [mul r a b] Multiply two scalars (modulo the group order). *)
+
+  val shr_int : t -> int -> int
+  (** Shift a scalar right by some amount strictly between 0 and 16,
+      returning the low bits that were shifted off *)
+
+  val sqr : t -> t -> unit
+  (** [sqr r a] Compute the square of a scalar (modulo the group
+      order). *)
+
+  val inverse : t -> t -> unit
+  (** [inverse r a] Compute the inverse of a scalar (modulo the group
+      order). *)
+
+  val inverse_var : t -> t -> unit
+  (** [inverse_var r a] Compute the inverse of a scalar (modulo the
+      group order), without constant-time guarantee. *)
+
+  val negate : t -> t -> unit
+  (** [negate r a] Compute the complement of a scalar (modulo the
+      group order). *)
+
+  val is_zero : t -> bool
+  (** Check whether a scalar equals zero. *)
+
+  val is_one : t -> bool
+  (** Check whether a scalar equals one. *)
+
+  val is_even : t -> bool
+  (** Check whether a scalar, considered as an nonnegative integer, is
+      even. *)
+
+  val is_high : t -> bool
+  (** Check whether a scalar is higher than the group order divided by
+      2. *)
+
+  val cond_negate : t -> bool -> bool
+  (** Conditionally negate a number, in constant time. Returns [true]
+      if the number was negated, [false] otherwise *)
+
+  val get_num : Num.t -> t -> unit
+  (** Convert a scalar to a number. *)
+
+  val order_get_num : Num.t -> unit
+  (** Get the order of the group as a number. *)
+
+  val compare : t -> t -> int
+  (** Compare two scalars. *)
+
+  val mul_shift_var : t -> t -> t -> int -> unit
+  (** Multiply a and b (without taking the modulus!), divide by
+      2**shift, and round to the nearest integer. Shift must be at
+      least 256. *)
 end
 
 (** Field element module.
@@ -126,11 +218,11 @@ module Field : sig
   val compare : t -> t -> int
   (** Alias to [cmp_var]. *)
 
-  val set_b32 : t -> int32 -> bool
+  val set_b32 : t -> Cstruct.t -> bool
   (** Set a field element equal to 32-byte big endian value. If
       successful, the resulting field element is normalized. *)
 
-  val get_b32 : t -> int32
+  val get_b32 : Cstruct.t -> t -> unit
   (** Convert a field element to a 32-byte big endian value. Requires
       the input to be normalized. *)
 
