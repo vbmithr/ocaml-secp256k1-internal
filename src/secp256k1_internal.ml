@@ -24,61 +24,61 @@ module Field = struct
     buf.buffer
 
   external normalize :
-    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize"
+    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize" [@@noalloc]
   external normalize_weak :
-    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize_weak"
+    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize_weak" [@@noalloc]
   external normalize_var :
-    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize_var"
+    Cstruct.buffer -> unit = "ml_secp256k1_fe_normalize_var" [@@noalloc]
   external normalizes_to_zero :
-    Cstruct.buffer -> bool = "ml_secp256k1_fe_normalizes_to_zero"
+    Cstruct.buffer -> bool = "ml_secp256k1_fe_normalizes_to_zero" [@@noalloc]
   external normalizes_to_zero_var :
-    Cstruct.buffer -> bool = "ml_secp256k1_fe_normalizes_to_zero_var"
+    Cstruct.buffer -> bool = "ml_secp256k1_fe_normalizes_to_zero_var" [@@noalloc]
   external set_int :
-    Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_set_int"
+    Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_set_int" [@@noalloc]
   external clear :
-    Cstruct.buffer -> unit = "ml_secp256k1_fe_clear"
+    Cstruct.buffer -> unit = "ml_secp256k1_fe_clear" [@@noalloc]
   external is_zero :
-    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_zero"
+    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_zero" [@@noalloc]
   external is_odd :
-    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_odd"
+    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_odd" [@@noalloc]
   external equal :
-    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_equal"
+    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_equal" [@@noalloc]
   external equal_var :
-    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_equal_var"
+    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_equal_var" [@@noalloc]
   external cmp_var :
-    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_fe_cmp_var"
+    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_fe_cmp_var" [@@noalloc]
   external set_b32 :
-    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_set_b32"
+    Cstruct.buffer -> Cstruct.buffer -> bool = "ml_secp256k1_fe_set_b32" [@@noalloc]
   external get_b32 :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_get_b32"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_get_b32" [@@noalloc]
   external negate :
-    Cstruct.buffer -> Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_negate"
+    Cstruct.buffer -> Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_negate" [@@noalloc]
   external mul_int :
-    Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_mul_int"
+    Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_mul_int" [@@noalloc]
   external add :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_add"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_add" [@@noalloc]
   external mul :
-    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_mul"
+    Cstruct.buffer -> Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_mul" [@@noalloc]
   external sqr :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_sqr"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_sqr" [@@noalloc]
   external sqrt :
-    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_fe_sqrt"
+    Cstruct.buffer -> Cstruct.buffer -> int = "ml_secp256k1_fe_sqrt" [@@noalloc]
   external is_quad_var :
-    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_quad_var"
+    Cstruct.buffer -> bool = "ml_secp256k1_fe_is_quad_var" [@@noalloc]
   external inv :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_inv"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_inv" [@@noalloc]
   external inv_var :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_inv_var"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_inv_var" [@@noalloc]
   external inv_all_var :
-    Cstruct.buffer -> Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_inv_all_var"
+    Cstruct.buffer -> Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_inv_all_var" [@@noalloc]
   external to_storage :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_to_storage"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_to_storage" [@@noalloc]
   external from_storage :
-    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_from_storage"
+    Cstruct.buffer -> Cstruct.buffer -> unit = "ml_secp256k1_fe_from_storage" [@@noalloc]
   external storage_cmov :
-    Cstruct.buffer -> Cstruct.buffer -> bool -> unit = "ml_secp256k1_fe_storage_cmov"
+    Cstruct.buffer -> Cstruct.buffer -> bool -> unit = "ml_secp256k1_fe_storage_cmov" [@@noalloc]
   external cmov :
-    Cstruct.buffer -> Cstruct.buffer -> bool -> unit = "ml_secp256k1_fe_cmov"
+    Cstruct.buffer -> Cstruct.buffer -> bool -> unit = "ml_secp256k1_fe_cmov" [@@noalloc]
 
   let set_b32 r a =
     let cs = Cstruct.create 4 in
