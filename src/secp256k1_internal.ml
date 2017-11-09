@@ -200,3 +200,125 @@ module Field = struct
 
   let compare = cmp_var
 end
+
+module Group = struct
+  type t = Cstruct.buffer
+  type ge = t
+  type storage = Cstruct.buffer
+
+  let size = 2 * Field.size + 8
+  let storage_size = 2 * Field.storage_size
+
+  module Jacobian = struct
+    type t = Cstruct.buffer
+
+    let size = 3 * Field.size + 8
+
+    external const :
+      t -> Field.t -> Field.t -> Field.t -> bool -> unit =
+      "ml_secp256k1_gej_const" [@@noalloc]
+
+    external set_infinity : t -> unit =
+      "ml_secp256k1_gej_set_infinity" [@@noalloc]
+
+    external set_ge : t -> ge -> unit =
+      "ml_secp256k1_gej_set_ge" [@@noalloc]
+
+    external eq_x_var : Field.t -> t -> int =
+      "ml_secp256k1_gej_eq_x_var" [@@noalloc]
+
+    external neg : t -> t -> unit =
+      "ml_secp256k1_gej_neg" [@@noalloc]
+
+    external is_infinity : t -> bool =
+      "ml_secp256k1_gej_is_infinity" [@@noalloc]
+
+    external has_quad_y_var : t -> bool =
+      "ml_secp256k1_gej_has_quad_y_var" [@@noalloc]
+
+    external double_nonzero : t -> t -> Field.t option -> unit =
+      "ml_secp256k1_gej_double_nonzero" [@@noalloc]
+
+    external double_var : t -> t -> Field.t option -> unit =
+      "ml_secp256k1_gej_double_var" [@@noalloc]
+
+    external add_var : t -> t -> t -> Field.t option -> unit =
+      "ml_secp256k1_gej_add_var" [@@noalloc]
+
+    external add_ge : t -> t -> ge -> unit =
+      "ml_secp256k1_gej_add_ge" [@@noalloc]
+
+    external add_ge_var : t -> t -> ge -> Field.t option -> unit =
+      "ml_secp256k1_gej_add_ge_var" [@@noalloc]
+
+    external add_zinv_var : t -> t -> ge -> Field.t -> unit =
+      "ml_secp256k1_gej_add_zinv_var" [@@noalloc]
+
+    external clear : t -> unit =
+      "ml_secp256k1_gej_clear" [@@noalloc]
+
+    external rescale : t -> Field.t -> unit =
+      "ml_secp256k1_gej_rescale" [@@noalloc]
+
+    let const ?(x=Field.const ()) ?(y=Field.const ()) ?(z=Field.const ()) ?(infinity=false) () =
+      let cs = Cstruct.create size in
+      const cs.buffer x y z infinity ;
+      cs.buffer
+
+    let double_nonzero ?rzr r a = double_nonzero r a rzr
+    let double_var ?rzr r a = double_var r a rzr
+    let add_var ?rzr r a b = add_var r a b rzr
+    let add_ge_var ?rzr r a b = add_ge_var r a b rzr
+  end
+
+  external const :
+    t -> Field.t -> Field.t -> bool -> unit =
+    "ml_secp256k1_ge_const" [@@noalloc]
+
+  external storage_const :
+    t -> Field.storage -> Field.storage -> unit =
+    "ml_secp256k1_ge_storage_const" [@@noalloc]
+
+  external set_xy : t -> Field.t -> Field.t -> unit =
+    "ml_secp256k1_ge_set_xy" [@@noalloc]
+
+  external set_xquad : t -> Field.t -> unit =
+    "ml_secp256k1_ge_set_xquad" [@@noalloc]
+
+  external set_xovar : t -> Field.t -> int -> bool =
+    "ml_secp256k1_ge_set_xquad" [@@noalloc]
+
+  external is_infinity : t -> bool =
+    "ml_secp256k1_ge_is_infinity" [@@noalloc]
+
+  external is_valid_var : t -> bool =
+    "ml_secp256k1_ge_is_valid_var" [@@noalloc]
+
+  external neg : t -> t -> unit =
+    "ml_secp256k1_ge_neg" [@@noalloc]
+
+  external set_j : t -> Jacobian.t -> unit =
+    "ml_secp256k1_ge_set_gej" [@@noalloc]
+
+  external clear : t -> unit =
+    "ml_secp256k1_ge_clear" [@@noalloc]
+
+  external to_storage : storage -> t -> unit =
+    "ml_secp256k1_ge_to_storage" [@@noalloc]
+
+  external from_storage : t -> storage -> unit =
+    "ml_secp256k1_ge_from_storage" [@@noalloc]
+
+  external storage_cmov : storage -> storage -> bool -> unit =
+    "ml_secp256k1_ge_storage_cmov" [@@noalloc]
+
+  let const ?(x=Field.const ()) ?(y=Field.const ()) ?(infinity=false) () =
+    let cs = Cstruct.create size in
+    const cs.buffer x y infinity ;
+    cs.buffer
+
+  let storage_const ?(x=Field.const ()) ?(y=Field.const ()) () =
+    let cs = Cstruct.create storage_size in
+    storage_const cs.buffer x y ;
+    cs.buffer
+end

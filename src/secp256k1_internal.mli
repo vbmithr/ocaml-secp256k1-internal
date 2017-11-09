@@ -290,3 +290,127 @@ module Field : sig
   (** If flag is true, set *r equal to *a; otherwise leave
       it. Constant-time. *)
 end
+
+module Group : sig
+  type t
+  (** Type of a group element (affine coordinates). *)
+
+  type ge = t
+  type storage
+
+  module Jacobian : sig
+    type t
+    (** Type of a group element (jacobian). *)
+
+    val const :
+      ?x:Field.t -> ?y:Field.t -> ?z:Field.t -> ?infinity:bool -> unit -> t
+
+    val set_infinity : t -> unit
+    (** Set a group element (jacobian) equal to the point at
+       infinity. *)
+
+    val set_ge : t -> ge -> unit
+    (** Set a group element (jacobian) equal to another which is given
+        in affine coordinates. *)
+
+    val eq_x_var : Field.t -> t -> int
+    (** Compare the X coordinate of a group element (jacobian). *)
+
+    val neg : t -> t -> unit
+    (** [neg r a] Set r equal to the inverse of a (i.e., mirrored
+        around the X axis) *)
+
+    val is_infinity : t -> bool
+    (** Check whether a group element is the point at infinity. *)
+
+    val has_quad_y_var : t -> bool
+    (** Check whether a group element's y coordinate is a quadratic
+        residue. *)
+
+    val double_nonzero : ?rzr:Field.t -> t -> t -> unit
+    (** [double_nonzero ?rzr r a] Set [r] equal to the double of
+        [a]. If rzr is not-None, [r->z = a->z * *rzr] (where infinity
+        means an implicit z = 0). [a] may not be zero. Constant
+        time. *)
+
+    val double_var : ?rzr:Field.t -> t -> t -> unit
+    (** [double_var ?rzr r a] Set [r] equal to the double of [a]. If
+        [rzr] is not-None, [r->z = a->z * *rzr] (where infinity means
+        an implicit z = 0). *)
+
+    val add_var : ?rzr:Field.t -> t -> t -> t -> unit
+    (** [add_var ?rzr r a b] Set [r] equal to the sum of [a] and
+        [b]. If rzr is non-None, [r->z = a->z * *rzr] ([a] cannot be
+        infinity in that case). *)
+
+    val add_ge : t -> t -> ge -> unit
+    (** [add_ge r a b] Set [r] equal to the sum of [a] and [b] (with [b] given
+        in affine coordinates, and not infinity). *)
+
+    val add_ge_var : ?rzr:Field.t -> t -> t -> ge -> unit
+    (** [add_ge_var ?rzr r a b] Set [r] equal to the sum of [a] and [b]
+        (with [b] given in affine coordinates). This is more efficient
+        than [add_var]. It is identical to [add_ge] but without
+        constant-time guarantee, and [b] is allowed to be infinity. If
+        rzr is non-None, [r->z = a->z * *rzr] ([a] cannot be infinity
+        in that case). *)
+
+    val add_zinv_var : t -> t -> ge -> Field.t -> unit
+    (** Set r equal to the sum of a and b (with the inverse of b's Z
+        coordinate passed as bzinv). *)
+
+    val clear : t -> unit
+    (** Clear a [t] to prevent leaking sensitive information. *)
+
+    val rescale : t -> Field.t -> unit
+    (** Rescale a jacobian point by b which must be
+        non-zero. Constant-time. *)
+  end
+
+  val const :
+    ?x:Field.t -> ?y:Field.t -> ?infinity:bool -> unit -> t
+  val storage_const :
+    ?x:Field.storage -> ?y:Field.storage -> unit -> t
+
+  val set_xy : t -> Field.t -> Field.t -> unit
+  (** Set a group element equal to the point with given X and Y
+      coordinates *)
+
+  val set_xquad : t -> Field.t -> unit
+  (** Set a group element (affine) equal to the point with the given X
+      coordinate and a Y coordinate that is a quadratic residue modulo
+      p. The return value is true iff a coordinate with the given X
+      coordinate exists. *)
+
+  val set_xovar : t -> Field.t -> int -> bool
+  (** Set a group element (affine) equal to the point with the given X
+      coordinate, and given oddness for Y. Return value indicates
+      whether the result is valid. *)
+
+  val is_infinity : t -> bool
+  (** Check whether a group element is the point at infinity. *)
+
+  val is_valid_var : t -> bool
+  (** Check whether a group element is valid (i.e., on the curve). *)
+
+  val neg : t -> t -> unit
+  (** [neg r a] Set r equal to the inverse of a (i.e., mirrored
+      around the X axis) *)
+
+  val set_j : t -> Jacobian.t -> unit
+  (** Set a group element equal to another which is given in jacobian
+      coordinates. *)
+
+  val clear : t -> unit
+  (** Clear a [t] to prevent leaking sensitive information. *)
+
+  val to_storage : t -> storage -> unit
+  (** Convert a group element to the storage type. *)
+
+  val from_storage : storage -> t -> unit
+  (** Convert a group element back from the storage type. *)
+
+  val storage_cmov : storage -> storage -> bool -> unit
+  (** If flag is true, set *r equal to *a; otherwise leave
+      it. Constant-time. *)
+end
