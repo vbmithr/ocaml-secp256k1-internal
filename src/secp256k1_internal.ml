@@ -118,7 +118,7 @@ module Field = struct
 
   external storage_const :
     t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
-    "ml_secp256k1_fe_storage_const" "ml_secp256k1_fe_const_storage_bytecode" [@@noalloc]
+    "ml_secp256k1_fe_storage_const" "ml_secp256k1_fe_storage_const_bytecode" [@@noalloc]
 
   let const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
     let buf = Cstruct.create size in

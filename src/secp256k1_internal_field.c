@@ -68,11 +68,11 @@ CAMLprim value ml_secp256k1_fe_clear(value r) {
     return Val_unit;
 }
 
-CAMLprim value ml_secp256k1_is_zero(value r) {
+CAMLprim value ml_secp256k1_fe_is_zero(value r) {
     return Val_bool(secp256k1_fe_is_zero(Caml_ba_data_val(r)));
 }
 
-CAMLprim value ml_secp256k1_is_odd(value r) {
+CAMLprim value ml_secp256k1_fe_is_odd(value r) {
     return Val_bool(secp256k1_fe_is_odd(Caml_ba_data_val(r)));
 }
 
@@ -126,7 +126,7 @@ CAMLprim value ml_secp256k1_fe_sqrt(value r, value a) {
     return Val_bool(secp256k1_fe_sqrt(Caml_ba_data_val(r), Caml_ba_data_val(a)));
 }
 
-CAMLprim value ml_secp256k1_is_quad_var(value r) {
+CAMLprim value ml_secp256k1_fe_is_quad_var(value r) {
     return Val_bool(secp256k1_fe_is_quad_var(Caml_ba_data_val(r)));
 }
 
