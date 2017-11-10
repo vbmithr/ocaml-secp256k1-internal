@@ -2,6 +2,10 @@
 #include <caml/bigarray.h>
 #include <secp256k1_num.h>
 
+CAMLprim value sizeof_secp256k1_num(value unit) {
+    return Val_int(sizeof(secp256k1_num));
+}
+
 CAMLprim value ml_secp256k1_num_copy(value r, value a) {
     secp256k1_num_copy(Caml_ba_data_val(r), Caml_ba_data_val(a));
     return Val_unit;

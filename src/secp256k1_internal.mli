@@ -1,6 +1,12 @@
 module Num : sig
   type t
 
+  val zero : t
+  val one : t
+  val of_uint16 : int -> t
+  val of_uint32 : int32 -> t
+  val of_uint64 : int64 -> t
+
   val copy : t -> t -> unit
   (** Copy a number. *)
 

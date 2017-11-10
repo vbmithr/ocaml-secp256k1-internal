@@ -1,6 +1,8 @@
 module Num = struct
   type t = Cstruct.buffer
 
+  external size :
+    unit -> int = "sizeof_secp256k1_num" [@@noalloc]
   external copy :
     t -> t -> unit = "ml_secp256k1_num_copy" [@@noalloc]
   external get_bin :
@@ -34,10 +36,36 @@ module Num = struct
   external negate :
     t -> unit = "ml_secp256k1_num_negate" [@@noalloc]
 
+  let size = size ()
+
   let get_bin cs =
     Cstruct.(get_bin (to_bigarray cs) (len cs))
   let set_bin r cs =
     Cstruct.(set_bin r (to_bigarray cs) (len cs))
+
+  let of_uint16 i =
+    let t = Cstruct.create size in
+    let cs = Cstruct.create 2 in
+    Cstruct.BE.set_uint16 cs 0 i ;
+    set_bin t.buffer cs ;
+    t.buffer
+
+  let zero = of_uint16 0
+  let one = of_uint16 1
+
+  let of_uint32 i =
+    let t = Cstruct.create size in
+    let cs = Cstruct.create 4 in
+    Cstruct.BE.set_uint32 cs 0 i ;
+    set_bin t.buffer cs ;
+    t.buffer
+
+  let of_uint64 i =
+    let t = Cstruct.create size in
+    let cs = Cstruct.create 8 in
+    Cstruct.BE.set_uint64 cs 0 i ;
+    set_bin t.buffer cs ;
+    t.buffer
 end
 
 module Scalar = struct
