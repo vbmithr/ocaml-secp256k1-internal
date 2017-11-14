@@ -1,7 +1,9 @@
 #include <string.h>
 #include <caml/mlvalues.h>
 #include <caml/bigarray.h>
-#include <secp256k1_field.h>
+
+#include "num_impl.h"
+#include "field_impl.h"
 
 CAMLprim value ml_secp256k1_fe_const (value r,
                                       value d7, value d6, value d5, value d4,

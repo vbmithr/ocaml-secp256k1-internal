@@ -1,7 +1,10 @@
 #include <string.h>
 #include <caml/mlvalues.h>
 #include <caml/bigarray.h>
-#include <secp256k1_group.h>
+
+#include "num_impl.h"
+#include "field_impl.h"
+#include "group_impl.h"
 
 CAMLprim value ml_secp256k1_ge_const (value r, value x, value y, value infinity) {
     secp256k1_ge *g = Caml_ba_data_val(r);

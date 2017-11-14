@@ -1,6 +1,8 @@
 #include <caml/mlvalues.h>
 #include <caml/bigarray.h>
-#include <secp256k1_num.h>
+
+#include "num.h"
+#include "num_gmp_impl.h"
 
 CAMLprim value sizeof_secp256k1_num(value unit) {
     return Val_int(sizeof(secp256k1_num));
