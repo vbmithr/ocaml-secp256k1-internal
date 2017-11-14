@@ -5,6 +5,8 @@
 #include "num_impl.h"
 #include "field_impl.h"
 #include "group_impl.h"
+#include "scalar_impl.h"
+#include "ecmult_const_impl.h"
 
 CAMLprim value ml_secp256k1_ge_const (value r, value x, value y, value infinity) {
     secp256k1_ge *g = Caml_ba_data_val(r);
@@ -149,5 +151,10 @@ CAMLprim value ml_secp256k1_ge_storage_cmov(value r, value a, value flag) {
 
 CAMLprim value ml_secp256k1_gej_rescale(value r, value b) {
     secp256k1_gej_rescale(Caml_ba_data_val(r), Caml_ba_data_val(b));
+    return Val_unit;
+}
+
+CAMLprim value ml_secp256k1_ecmult_const(value r, value a, value q) {
+    secp256k1_ecmult_const(Caml_ba_data_val(r), Caml_ba_data_val(a), Caml_ba_data_val(q));
     return Val_unit;
 }
