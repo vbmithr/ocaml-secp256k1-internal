@@ -282,6 +282,9 @@ module Group = struct
     external add_zinv_var : t -> t -> ge -> Field.t -> unit =
       "ml_secp256k1_gej_add_zinv_var" [@@noalloc]
 
+    external mul : t -> ge -> Scalar.t -> unit =
+      "ml_secp256k1_ecmult_const" [@@noalloc]
+
     external clear : t -> unit =
       "ml_secp256k1_gej_clear" [@@noalloc]
 
@@ -349,7 +352,4 @@ module Group = struct
     let cs = Cstruct.create storage_size in
     storage_const cs.buffer x y ;
     cs.buffer
-
-  external mul : Jacobian.t -> t -> Scalar.t -> unit =
-    "ml_secp256k1_ecmult_const" [@@noalloc]
 end

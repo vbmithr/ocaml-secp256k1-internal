@@ -365,6 +365,8 @@ module Group : sig
     (** Set r equal to the sum of a and b (with the inverse of b's Z
         coordinate passed as bzinv). *)
 
+    val mul : t -> ge -> Scalar.t -> unit
+
     val clear : t -> unit
     (** Clear a [t] to prevent leaking sensitive information. *)
 
@@ -419,6 +421,4 @@ module Group : sig
   val storage_cmov : storage -> storage -> bool -> unit
   (** If flag is true, set *r equal to *a; otherwise leave
       it. Constant-time. *)
-
-  val mul : Jacobian.t -> t -> Scalar.t -> unit
 end
