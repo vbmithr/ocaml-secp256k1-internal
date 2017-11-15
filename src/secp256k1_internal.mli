@@ -319,6 +319,10 @@ module Group : sig
     (** Set a group element (jacobian) equal to the point at
        infinity. *)
 
+    val get_ge : ge -> t -> unit
+    (** Set a group element equal to another which is given in jacobian
+        coordinates. *)
+
     val set_ge : t -> ge -> unit
     (** Set a group element (jacobian) equal to another which is given
         in affine coordinates. *)
@@ -408,10 +412,6 @@ module Group : sig
   val neg : t -> t -> unit
   (** [neg r a] Set r equal to the inverse of a (i.e., mirrored
       around the X axis) *)
-
-  val set_j : t -> Jacobian.t -> unit
-  (** Set a group element equal to another which is given in jacobian
-      coordinates. *)
 
   val clear : t -> unit
   (** Clear a [t] to prevent leaking sensitive information. *)

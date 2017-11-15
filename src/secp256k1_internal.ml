@@ -258,6 +258,9 @@ module Group = struct
     external set_ge : t -> ge -> unit =
       "ml_secp256k1_gej_set_ge" [@@noalloc]
 
+    external get_ge : ge -> t -> unit =
+      "ml_secp256k1_ge_set_gej" [@@noalloc]
+
     external eq_x_var : Field.t -> t -> int =
       "ml_secp256k1_gej_eq_x_var" [@@noalloc]
 
@@ -333,9 +336,6 @@ module Group = struct
 
   external neg : t -> t -> unit =
     "ml_secp256k1_ge_neg" [@@noalloc]
-
-  external set_j : t -> Jacobian.t -> unit =
-    "ml_secp256k1_ge_set_gej" [@@noalloc]
 
   external clear : t -> unit =
     "ml_secp256k1_ge_clear" [@@noalloc]
