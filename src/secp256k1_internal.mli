@@ -64,6 +64,8 @@ module Scalar : sig
   type t
   (** A scalar modulo the group order of the secp256k1 curve. *)
 
+  val zero : unit -> t
+
   val const :
     ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
     ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t

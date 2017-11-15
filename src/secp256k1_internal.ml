@@ -82,6 +82,8 @@ module Scalar = struct
     const buf.buffer d7 d6 d5 d4 d3 d2 d1 d0 ;
     buf.buffer
 
+  let zero () = const ()
+
   external clear :
     t -> unit = "ml_secp256k1_scalar_clear" [@@noalloc]
   external get_bits :
