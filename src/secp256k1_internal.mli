@@ -62,6 +62,7 @@ end
 
 module Scalar : sig
   type t
+  (** A scalar modulo the group order of the secp256k1 curve. *)
 
   val const :
     ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
@@ -72,11 +73,11 @@ module Scalar : sig
 
   val get_bits : t -> int -> int -> int
   (** [get_bits a offset count] Access bits from a scalar. All
-     requested bits must belong to the same 32-bit limb. *)
+      requested bits must belong to the same 32-bit limb. *)
 
   val get_bits_var : t -> int -> int -> int
   (** [get_bits a offset count] Access bits from a scalar. Not
-     constant time. *)
+      constant time. *)
 
   val set_b32 : t -> Cstruct.t -> bool
   (** Set a scalar from a big endian byte array. *)
