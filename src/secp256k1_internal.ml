@@ -141,27 +141,44 @@ end
 
 module Field = struct
   type t = Cstruct.buffer
-  type storage = Cstruct.buffer
+
+  module Storage = struct
+    type t = Cstruct.buffer
+    let size = 32
+    let to_cstruct t = Cstruct.of_bigarray t
+    let of_cstruct cs =
+      let res = Cstruct.create size in
+      try
+        Cstruct.blit cs 0 res 0 size ;
+        Some res.buffer
+      with _ -> None
+    let of_cstruct_exn cs =
+      match of_cstruct cs with
+      | Some t -> t
+      | None -> invalid_arg "Field.Storage.of_cstruct_exn"
+
+    external const :
+      t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
+      "ml_secp256k1_fe_storage_const_bytecode" "ml_secp256k1_fe_storage_const" [@@noalloc]
+
+    let const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
+      let buf = Cstruct.create size in
+      const buf.buffer d7 d6 d5 d4 d3 d2 d1 d0 ;
+      buf.buffer
+
+    external cmov :
+      t -> t -> bool -> unit = "ml_secp256k1_fe_storage_cmov" [@@noalloc]
+  end
 
   let size = 40
-  let storage_size = 32
 
   external const :
     t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
     "ml_secp256k1_fe_const_bytecode" "ml_secp256k1_fe_const" [@@noalloc]
 
-  external storage_const :
-    t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
-    "ml_secp256k1_fe_storage_const_bytecode" "ml_secp256k1_fe_storage_const" [@@noalloc]
-
   let const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
     let buf = Cstruct.create size in
     const buf.buffer d7 d6 d5 d4 d3 d2 d1 d0 ;
-    buf.buffer
-
-  let storage_const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
-    let buf = Cstruct.create storage_size in
-    storage_const buf.buffer d7 d6 d5 d4 d3 d2 d1 d0 ;
     buf.buffer
 
   external normalize :
@@ -213,11 +230,9 @@ module Field = struct
   external inv_all_var :
     t -> Cstruct.buffer -> int -> unit = "ml_secp256k1_fe_inv_all_var" [@@noalloc]
   external to_storage :
-    storage -> t -> unit = "ml_secp256k1_fe_to_storage" [@@noalloc]
+    Storage.t -> t -> unit = "ml_secp256k1_fe_to_storage" [@@noalloc]
   external from_storage :
-    t -> storage -> unit = "ml_secp256k1_fe_from_storage" [@@noalloc]
-  external storage_cmov :
-    storage -> storage -> bool -> unit = "ml_secp256k1_fe_storage_cmov" [@@noalloc]
+    t -> Storage.t -> unit = "ml_secp256k1_fe_from_storage" [@@noalloc]
   external cmov :
     t -> t -> bool -> unit = "ml_secp256k1_fe_cmov" [@@noalloc]
 
@@ -238,10 +253,33 @@ end
 module Group = struct
   type t = Cstruct.buffer
   type ge = t
-  type storage = Cstruct.buffer
 
   let size = 2 * Field.size + 8
-  let storage_size = 2 * Field.storage_size
+
+  module Storage = struct
+    type t = Cstruct.buffer
+    let size = 2 * Field.Storage.size
+    let to_cstruct t = Cstruct.of_bigarray t
+    let of_cstruct cs =
+      let res = Cstruct.create size in
+      try
+        Cstruct.blit cs 0 res 0 size ;
+        Some res.buffer
+      with _ -> None
+    let of_cstruct_exn cs =
+      match of_cstruct cs with
+      | Some t -> t
+      | None -> invalid_arg "Group.Storage.of_cstruct_exn"
+    external const :
+      t -> Field.Storage.t -> Field.Storage.t -> unit =
+      "ml_secp256k1_ge_storage_const" [@@noalloc]
+    let const ?(x=Field.const ()) ?(y=Field.const ()) () =
+      let cs = Cstruct.create size in
+      const cs.buffer x y ;
+      cs.buffer
+    external cmov : t -> t -> bool -> unit =
+      "ml_secp256k1_ge_storage_cmov" [@@noalloc]
+  end
 
   module Jacobian = struct
     type t = Cstruct.buffer
@@ -315,10 +353,6 @@ module Group = struct
     t -> Field.t -> Field.t -> bool -> unit =
     "ml_secp256k1_ge_const" [@@noalloc]
 
-  external storage_const :
-    t -> Field.storage -> Field.storage -> unit =
-    "ml_secp256k1_ge_storage_const" [@@noalloc]
-
   external set_xy : t -> Field.t -> Field.t -> unit =
     "ml_secp256k1_ge_set_xy" [@@noalloc]
 
@@ -340,22 +374,15 @@ module Group = struct
   external clear : t -> unit =
     "ml_secp256k1_ge_clear" [@@noalloc]
 
-  external to_storage : storage -> t -> unit =
+  external to_storage : Storage.t -> t -> unit =
     "ml_secp256k1_ge_to_storage" [@@noalloc]
 
-  external from_storage : t -> storage -> unit =
+  external from_storage : t -> Storage.t -> unit =
     "ml_secp256k1_ge_from_storage" [@@noalloc]
-
-  external storage_cmov : storage -> storage -> bool -> unit =
-    "ml_secp256k1_ge_storage_cmov" [@@noalloc]
 
   let const ?(x=Field.const ()) ?(y=Field.const ()) ?(infinity=false) () =
     let cs = Cstruct.create size in
     const cs.buffer x y infinity ;
     cs.buffer
 
-  let storage_const ?(x=Field.const ()) ?(y=Field.const ()) () =
-    let cs = Cstruct.create storage_size in
-    storage_const cs.buffer x y ;
-    cs.buffer
 end

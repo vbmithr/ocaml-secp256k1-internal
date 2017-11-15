@@ -166,17 +166,26 @@ end
  *    normality. *)
 module Field : sig
   type t
-  type storage
+
+  module Storage : sig
+    type t
+    val size : int
+    val of_cstruct : Cstruct.t -> t option
+    val of_cstruct_exn : Cstruct.t -> t
+    val to_cstruct : t -> Cstruct.t
+    val const :
+    ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
+    ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
+    val cmov : t -> t -> bool -> unit
+    (** If flag is true, set *r equal to *a; otherwise leave
+        it. Constant-time. *)
+  end
 
   val const :
     ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
     ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
   (** Unpacks a constant into a overlapping multi-limbed FE
       element. *)
-
-  val storage_const :
-    ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
-    ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
 
   val normalize : t -> unit
   (** Normalize a field element. *)
@@ -286,15 +295,11 @@ module Field : sig
       normalized). The inputs and outputs must not overlap in
       memory. *)
 
-  val to_storage : storage -> t -> unit
+  val to_storage : Storage.t -> t -> unit
   (** Convert a field element to the storage type. *)
 
-  val from_storage : t -> storage -> unit
+  val from_storage : t -> Storage.t -> unit
   (** Convert a field element back from the storage type. *)
-
-  val storage_cmov : storage -> storage -> bool -> unit
-  (** If flag is true, set *r equal to *a; otherwise leave
-      it. Constant-time. *)
 
   val cmov : t -> t -> bool -> unit
   (** If flag is true, set *r equal to *a; otherwise leave
@@ -306,7 +311,19 @@ module Group : sig
   (** Type of a group element (affine coordinates). *)
 
   type ge = t
-  type storage
+
+  module Storage : sig
+    type t
+    val size : int
+    val of_cstruct : Cstruct.t -> t option
+    val of_cstruct_exn : Cstruct.t -> t
+    val to_cstruct : t -> Cstruct.t
+    val const :
+      ?x:Field.Storage.t -> ?y:Field.Storage.t -> unit -> t
+    val cmov : t -> t -> bool -> unit
+    (** If flag is true, set *r equal to *a; otherwise leave
+        it. Constant-time. *)
+  end
 
   module Jacobian : sig
     type t
@@ -385,8 +402,6 @@ module Group : sig
 
   val const :
     ?x:Field.t -> ?y:Field.t -> ?infinity:bool -> unit -> t
-  val storage_const :
-    ?x:Field.storage -> ?y:Field.storage -> unit -> storage
 
   val set_xy : t -> Field.t -> Field.t -> unit
   (** Set a group element equal to the point with given X and Y
@@ -416,13 +431,9 @@ module Group : sig
   val clear : t -> unit
   (** Clear a [t] to prevent leaking sensitive information. *)
 
-  val to_storage : storage -> t -> unit
+  val to_storage : Storage.t -> t -> unit
   (** Convert a group element to the storage type. *)
 
-  val from_storage : t -> storage -> unit
+  val from_storage : t -> Storage.t -> unit
   (** Convert a group element back from the storage type. *)
-
-  val storage_cmov : storage -> storage -> bool -> unit
-  (** If flag is true, set *r equal to *a; otherwise leave
-      it. Constant-time. *)
 end
