@@ -50,8 +50,8 @@ module Num = struct
     set_bin t.buffer cs ;
     t.buffer
 
-  let zero = of_uint16 0
-  let one = of_uint16 1
+  let zero () = of_uint16 0
+  let one () = of_uint16 1
 
   let of_uint32 i =
     let t = Cstruct.create size in
@@ -75,7 +75,7 @@ module Scalar = struct
 
   external const :
     t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
-    "ml_secp256k1_fe_const" "ml_secp256k1_fe_const_bytecode" [@@noalloc]
+    "ml_secp256k1_fe_const_bytecode" "ml_secp256k1_fe_const" [@@noalloc]
 
   let const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
     let buf = Cstruct.create size in
@@ -144,11 +144,11 @@ module Field = struct
 
   external const :
     t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
-    "ml_secp256k1_fe_const" "ml_secp256k1_fe_const_bytecode" [@@noalloc]
+    "ml_secp256k1_fe_const_bytecode" "ml_secp256k1_fe_const" [@@noalloc]
 
   external storage_const :
     t -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> int64 -> unit =
-    "ml_secp256k1_fe_storage_const" "ml_secp256k1_fe_storage_const_bytecode" [@@noalloc]
+    "ml_secp256k1_fe_storage_const_bytecode" "ml_secp256k1_fe_storage_const" [@@noalloc]
 
   let const ?(d7=0L) ?(d6=0L) ?(d5=0L) ?(d4=0L) ?(d3=0L) ?(d2=0L) ?(d1=0L) ?(d0=0L) () =
     let buf = Cstruct.create size in

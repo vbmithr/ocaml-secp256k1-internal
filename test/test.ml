@@ -5,7 +5,7 @@ let assert_equal a b = assert (a = b)
 module Num = struct
   open Num
   let basic () =
-    let z = zero in
+    let z = zero () in
     assert_equal true (is_zero z)
 
   let runtest =

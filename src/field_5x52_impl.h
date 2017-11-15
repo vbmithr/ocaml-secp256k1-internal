@@ -8,7 +8,7 @@
 #define SECP256K1_FIELD_REPR_IMPL_H
 
 #include "util.h"
-#include "num.h"
+#include "num_impl.h"
 #include "field.h"
 #include "field_5x52_asm_impl.h"
 

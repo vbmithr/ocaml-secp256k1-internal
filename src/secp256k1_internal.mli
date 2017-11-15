@@ -1,8 +1,8 @@
 module Num : sig
   type t
 
-  val zero : t
-  val one : t
+  val zero : unit -> t
+  val one : unit -> t
   val of_uint16 : int -> t
   val of_uint32 : int32 -> t
   val of_uint64 : int64 -> t
