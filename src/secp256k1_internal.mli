@@ -286,10 +286,10 @@ module Field : sig
       normalized). The inputs and outputs must not overlap in
       memory. *)
 
-  val to_storage : t -> storage -> unit
+  val to_storage : storage -> t -> unit
   (** Convert a field element to the storage type. *)
 
-  val from_storage : storage -> t -> unit
+  val from_storage : t -> storage -> unit
   (** Convert a field element back from the storage type. *)
 
   val storage_cmov : storage -> storage -> bool -> unit
@@ -386,7 +386,7 @@ module Group : sig
   val const :
     ?x:Field.t -> ?y:Field.t -> ?infinity:bool -> unit -> t
   val storage_const :
-    ?x:Field.storage -> ?y:Field.storage -> unit -> t
+    ?x:Field.storage -> ?y:Field.storage -> unit -> storage
 
   val set_xy : t -> Field.t -> Field.t -> unit
   (** Set a group element equal to the point with given X and Y
@@ -416,10 +416,10 @@ module Group : sig
   val clear : t -> unit
   (** Clear a [t] to prevent leaking sensitive information. *)
 
-  val to_storage : t -> storage -> unit
+  val to_storage : storage -> t -> unit
   (** Convert a group element to the storage type. *)
 
-  val from_storage : storage -> t -> unit
+  val from_storage : t -> storage -> unit
   (** Convert a group element back from the storage type. *)
 
   val storage_cmov : storage -> storage -> bool -> unit
