@@ -45,7 +45,7 @@ module Num : sig
       negative. *)
 
   val shift : t -> int -> unit
-  (** Right-shift the passed number by bits bits. *)
+  (** [shift t bits] Right-shift the passed number by [bits] bits. *)
 
   val is_zero : t -> bool
   (** Check whether a number is zero. *)
@@ -65,6 +65,7 @@ module Scalar : sig
   (** A scalar modulo the group order of the secp256k1 curve. *)
 
   val zero : unit -> t
+  val copy : t -> t
 
   val const :
     ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->

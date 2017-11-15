@@ -83,6 +83,10 @@ module Scalar = struct
     buf.buffer
 
   let zero () = const ()
+  let copy t =
+    let ret = Cstruct.create size in
+    Cstruct.(blit (of_bigarray t) 0 ret 0 size) ;
+    ret.buffer
 
   external clear :
     t -> unit = "ml_secp256k1_scalar_clear" [@@noalloc]
