@@ -7,13 +7,5 @@
   (c_names         (secp256k1_internal_num
                     secp256k1_internal_scalar
                     secp256k1_internal_field
-                    secp256k1_internal_group
-                    ))
-  (c_flags         (:include c_flags.sexp))
-  (c_library_flags (:include c_library_flags.sexp))))
-
-(rule
- ((targets (c_flags.sexp
-            c_library_flags.sexp))
-  (deps    (config/discover.exe))
-  (action  (run ${<} -ocamlc ${OCAMLC}))))
+                    secp256k1_internal_group))
+  (c_library_flags (-lgmp))))
