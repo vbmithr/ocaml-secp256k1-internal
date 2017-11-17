@@ -83,6 +83,7 @@ module Scalar = struct
     buf.buffer
 
   let zero () = const ()
+  let one () = const ~d0:1L ()
   let copy t =
     let ret = Cstruct.create size in
     Cstruct.(blit (of_bigarray t) 0 ret 0 size) ;

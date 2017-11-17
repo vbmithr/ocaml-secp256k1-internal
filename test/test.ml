@@ -18,7 +18,8 @@ module Scalar = struct
   let basic () =
     let z = zero () in
     assert_equal true (is_zero z) ;
-    set_int z 1 ;
+    (* set_int z 1 ; *)
+    let z = const ~d0:1L () in
     assert_equal false (is_zero z) ;
     assert_equal false (is_even z) ;
     assert_equal true (is_one z)

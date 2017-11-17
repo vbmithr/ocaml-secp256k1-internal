@@ -65,6 +65,7 @@ module Scalar : sig
   (** A scalar modulo the group order of the secp256k1 curve. *)
 
   val zero : unit -> t
+  val one : unit -> t
   val copy : t -> t
 
   val const :
