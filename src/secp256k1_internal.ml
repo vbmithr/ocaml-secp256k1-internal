@@ -138,6 +138,9 @@ module Scalar = struct
 
   let set_b32 t buf = set_b32 t (Cstruct.to_bigarray buf)
   let get_b32 buf t = get_b32 (Cstruct.to_bigarray buf) t
+
+  let equal a b =
+    compare a b = 0
 end
 
 module Field = struct

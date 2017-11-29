@@ -150,6 +150,8 @@ module Scalar : sig
   val compare : t -> t -> int
   (** Compare two scalars. *)
 
+  val equal : t -> t -> bool
+
   val mul_shift_var : t -> t -> t -> int -> unit
   (** Multiply a and b (without taking the modulus!), divide by
       2**shift, and round to the nearest integer. Shift must be at
