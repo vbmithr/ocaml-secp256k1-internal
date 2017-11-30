@@ -439,4 +439,12 @@ module Group : sig
 
   val from_storage : t -> Storage.t -> unit
   (** Convert a group element back from the storage type. *)
+
+  val to_pubkey : ?compress:bool -> Cstruct.t -> t -> Cstruct.t
+  (** [to_pubkey ?compress buf ge] serializes [ge] in [buf] and
+      returns [buf], adjusted to the actual size. *)
+
+  val from_pubkey : t -> Cstruct.t -> unit
+  (** [from_pubkey ge buf] parses a serialized pubkey in [buf] and
+      writes the result in [ge]. *)
 end

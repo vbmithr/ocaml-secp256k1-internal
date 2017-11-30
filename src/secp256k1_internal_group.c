@@ -7,6 +7,7 @@
 #include "group_impl.h"
 #include "scalar_impl.h"
 #include "ecmult_const_impl.h"
+#include "eckey_impl.h"
 
 CAMLprim value ml_secp256k1_ge_const (value r, value x, value y, value infinity) {
     secp256k1_ge *g = Caml_ba_data_val(r);
@@ -157,4 +158,13 @@ CAMLprim value ml_secp256k1_gej_rescale(value r, value b) {
 CAMLprim value ml_secp256k1_ecmult_const(value r, value a, value q) {
     secp256k1_ecmult_const(Caml_ba_data_val(r), Caml_ba_data_val(a), Caml_ba_data_val(q));
     return Val_unit;
+}
+
+CAMLprim value ml_secp256k1_eckey_pubkey_parse(value elem, value pub, value size) {
+    return Val_bool(secp256k1_eckey_pubkey_parse(Caml_ba_data_val(elem), Caml_ba_data_val(pub), Long_val(size)));
+}
+
+CAMLprim value ml_secp256k1_eckey_pubkey_serialize(value elem, value pub, value size, value compressed) {
+    size_t sz = Long_val(size);
+    return (secp256k1_eckey_pubkey_serialize(Caml_ba_data_val(elem), Caml_ba_data_val(pub), &sz, Bool_val(compressed)) ? Val_long(sz) : Val_long(0));
 }

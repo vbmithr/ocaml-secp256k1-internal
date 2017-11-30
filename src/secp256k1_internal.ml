@@ -389,4 +389,19 @@ module Group = struct
     const cs.buffer x y infinity ;
     cs.buffer
 
+  external serialize : t -> Cstruct.buffer -> int -> bool -> int =
+    "ml_secp256k1_eckey_pubkey_serialize" [@@noalloc]
+
+  external parse : t -> Cstruct.buffer -> int -> bool =
+    "ml_secp256k1_eckey_pubkey_parse" [@@noalloc]
+
+  let to_pubkey ?(compress=true) cs e =
+    match serialize e cs.Cstruct.buffer cs.len compress with
+    | 0 -> failwith "Group.to_pubkey"
+    | len -> Cstruct.sub cs 0 len
+
+  let from_pubkey t cs =
+    match parse t cs.Cstruct.buffer cs.len with
+    | false -> failwith "Group.from_pubkey"
+    | true -> ()
 end
