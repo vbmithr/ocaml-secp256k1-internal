@@ -406,6 +406,8 @@ module Group : sig
   val of_fields :
     ?x:Field.t -> ?y:Field.t -> ?infinity:bool -> unit -> t
 
+  val g : t
+
   val set_xy : t -> Field.t -> Field.t -> unit
   (** Set a group element equal to the point with given X and Y
       coordinates *)

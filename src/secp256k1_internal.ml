@@ -389,6 +389,15 @@ module Group = struct
     of_fields cs.buffer x y infinity ;
     cs.buffer
 
+  let g =
+    let x = Field.const
+        ~d7:0x79BE667EL ~d6:0xF9DCBBACL ~d5:0x55A06295L ~d4:0xCE870B07L
+        ~d3:0x029BFCDBL ~d2:0x2DCE28D9L ~d1:0x59F2815BL ~d0:0x16F81798L () in
+    let y = Field.const
+        ~d7:0x483ADA77L ~d6:0x26A3C465L ~d5:0x5DA4FBFCL ~d4:0x0E1108A8L
+        ~d3:0xFD17B448L ~d2:0xA6855419L ~d1:0x9C47D08FL ~d0:0xFB10D4B8L () in
+    of_fields ~x ~y ~infinity:false ()
+
   external serialize : t -> Cstruct.buffer -> int -> bool -> int =
     "ml_secp256k1_eckey_pubkey_serialize" [@@noalloc]
 
