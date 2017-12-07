@@ -9,7 +9,7 @@
 #include "ecmult_const_impl.h"
 #include "eckey_impl.h"
 
-CAMLprim value ml_secp256k1_ge_const (value r, value x, value y, value infinity) {
+CAMLprim value ml_secp256k1_ge_of_fields (value r, value x, value y, value infinity) {
     secp256k1_ge *g = Caml_ba_data_val(r);
     memcpy(&g->x, Caml_ba_data_val(x), sizeof(secp256k1_fe));
     memcpy(&g->y, Caml_ba_data_val(y), sizeof(secp256k1_fe));
@@ -17,7 +17,7 @@ CAMLprim value ml_secp256k1_ge_const (value r, value x, value y, value infinity)
     return Val_unit;
 }
 
-CAMLprim value ml_secp256k1_gej_const (value r, value x, value y, value z, value infinity) {
+CAMLprim value ml_secp256k1_gej_of_fields (value r, value x, value y, value z, value infinity) {
     secp256k1_gej *g = Caml_ba_data_val(r);
     memcpy(&g->x, Caml_ba_data_val(x), sizeof(secp256k1_fe));
     memcpy(&g->y, Caml_ba_data_val(y), sizeof(secp256k1_fe));
@@ -26,7 +26,7 @@ CAMLprim value ml_secp256k1_gej_const (value r, value x, value y, value z, value
     return Val_unit;
 }
 
-CAMLprim value ml_secp256k1_ge_storage_const (value r, value x, value y) {
+CAMLprim value ml_secp256k1_ge_storage_of_fields (value r, value x, value y) {
     secp256k1_ge_storage *g = Caml_ba_data_val(r);
     memcpy(&g->x, Caml_ba_data_val(x), sizeof(secp256k1_fe));
     memcpy(&g->y, Caml_ba_data_val(y), sizeof(secp256k1_fe));

@@ -274,12 +274,12 @@ module Group = struct
       match of_cstruct cs with
       | Some t -> t
       | None -> invalid_arg "Group.Storage.of_cstruct_exn"
-    external const :
+    external of_fields :
       t -> Field.Storage.t -> Field.Storage.t -> unit =
-      "ml_secp256k1_ge_storage_const" [@@noalloc]
-    let const ?(x=Field.const ()) ?(y=Field.const ()) () =
+      "ml_secp256k1_ge_storage_of_fields" [@@noalloc]
+    let of_fields ?(x=Field.const ()) ?(y=Field.const ()) () =
       let cs = Cstruct.create size in
-      const cs.buffer x y ;
+      of_fields cs.buffer x y ;
       cs.buffer
     external cmov : t -> t -> bool -> unit =
       "ml_secp256k1_ge_storage_cmov" [@@noalloc]
@@ -290,9 +290,9 @@ module Group = struct
 
     let size = 3 * Field.size + 8
 
-    external const :
+    external of_fields :
       t -> Field.t -> Field.t -> Field.t -> bool -> unit =
-      "ml_secp256k1_gej_const" [@@noalloc]
+      "ml_secp256k1_gej_of_fields" [@@noalloc]
 
     external set_infinity : t -> unit =
       "ml_secp256k1_gej_set_infinity" [@@noalloc]
@@ -342,9 +342,9 @@ module Group = struct
     external rescale : t -> Field.t -> unit =
       "ml_secp256k1_gej_rescale" [@@noalloc]
 
-    let const ?(x=Field.const ()) ?(y=Field.const ()) ?(z=Field.const ()) ?(infinity=false) () =
+    let of_fields ?(x=Field.const ()) ?(y=Field.const ()) ?(z=Field.const ()) ?(infinity=false) () =
       let cs = Cstruct.create size in
-      const cs.buffer x y z infinity ;
+      of_fields cs.buffer x y z infinity ;
       cs.buffer
 
     let double_nonzero ?rzr r a = double_nonzero r a rzr
@@ -353,9 +353,9 @@ module Group = struct
     let add_ge_var ?rzr r a b = add_ge_var r a b rzr
   end
 
-  external const :
+  external of_fields :
     t -> Field.t -> Field.t -> bool -> unit =
-    "ml_secp256k1_ge_const" [@@noalloc]
+    "ml_secp256k1_ge_of_fields" [@@noalloc]
 
   external set_xy : t -> Field.t -> Field.t -> unit =
     "ml_secp256k1_ge_set_xy" [@@noalloc]
@@ -384,9 +384,9 @@ module Group = struct
   external from_storage : t -> Storage.t -> unit =
     "ml_secp256k1_ge_from_storage" [@@noalloc]
 
-  let const ?(x=Field.const ()) ?(y=Field.const ()) ?(infinity=false) () =
+  let of_fields ?(x=Field.const ()) ?(y=Field.const ()) ?(infinity=false) () =
     let cs = Cstruct.create size in
-    const cs.buffer x y infinity ;
+    of_fields cs.buffer x y infinity ;
     cs.buffer
 
   external serialize : t -> Cstruct.buffer -> int -> bool -> int =

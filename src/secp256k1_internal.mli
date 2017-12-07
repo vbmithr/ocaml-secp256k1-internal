@@ -321,7 +321,7 @@ module Group : sig
     val of_cstruct : Cstruct.t -> t option
     val of_cstruct_exn : Cstruct.t -> t
     val to_cstruct : t -> Cstruct.t
-    val const :
+    val of_fields :
       ?x:Field.Storage.t -> ?y:Field.Storage.t -> unit -> t
     val cmov : t -> t -> bool -> unit
     (** If flag is true, set *r equal to *a; otherwise leave
@@ -332,7 +332,7 @@ module Group : sig
     type t
     (** Type of a group element (jacobian). *)
 
-    val const :
+    val of_fields :
       ?x:Field.t -> ?y:Field.t -> ?z:Field.t -> ?infinity:bool -> unit -> t
 
     val set_infinity : t -> unit
@@ -403,7 +403,7 @@ module Group : sig
         non-zero. Constant-time. *)
   end
 
-  val const :
+  val of_fields :
     ?x:Field.t -> ?y:Field.t -> ?infinity:bool -> unit -> t
 
   val set_xy : t -> Field.t -> Field.t -> unit
