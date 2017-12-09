@@ -120,7 +120,7 @@ CAMLprim value ml_secp256k1_scalar_order_get_num(value r) {
 }
 
 CAMLprim value ml_secp256k1_scalar_eq(value a, value b) {
-    return Val_int(secp256k1_scalar_eq(Caml_ba_data_val(a), Caml_ba_data_val(b)));
+    return Val_bool(secp256k1_scalar_eq(Caml_ba_data_val(a), Caml_ba_data_val(b)));
 }
 
 CAMLprim value ml_secp256k1_mul_shift_var(value r, value a, value b, value shift) {

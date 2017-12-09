@@ -147,10 +147,8 @@ module Scalar : sig
   val order_get_num : Num.t -> unit
   (** Get the order of the group as a number. *)
 
-  val compare : t -> t -> int
-  (** Compare two scalars. *)
-
   val equal : t -> t -> bool
+  (** Compare two scalars. *)
 
   val mul_shift_var : t -> t -> t -> int -> unit
   (** Multiply a and b (without taking the modulus!), divide by

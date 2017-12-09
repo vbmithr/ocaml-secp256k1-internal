@@ -131,16 +131,13 @@ module Scalar = struct
     Num.t -> t -> unit = "ml_secp256k1_scalar_get_num" [@@noalloc]
   external order_get_num :
     Num.t -> unit = "ml_secp256k1_scalar_order_get_num" [@@noalloc]
-  external compare :
-    t -> t -> int = "ml_secp256k1_scalar_eq" [@@noalloc]
+  external equal :
+    t -> t -> bool = "ml_secp256k1_scalar_eq" [@@noalloc]
   external mul_shift_var :
-    t -> t -> t -> int -> unit = "ml_secp256k1_scalar_eq" [@@noalloc]
+    t -> t -> t -> int -> unit = "ml_secp256k1_mul_shift_var" [@@noalloc]
 
   let set_b32 t buf = set_b32 t (Cstruct.to_bigarray buf)
   let get_b32 buf t = get_b32 (Cstruct.to_bigarray buf) t
-
-  let equal a b =
-    compare a b = 0
 end
 
 module Field = struct
