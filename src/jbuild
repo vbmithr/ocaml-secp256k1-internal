@@ -1,13 +1,12 @@
 (jbuild_version 1)
 
 (library
- ((name            secp256k1_internal)
-  (public_name     secp256k1-internal)
-  (libraries       (cstruct))
-  (c_names         (secp256k1_internal_num
-                    secp256k1_internal_scalar
-                    secp256k1_internal_field
-                    secp256k1_internal_group))
+ ((name            secp256k1_ml)
+  (public_name     secp256k1)
+  (modules         (internal external))
+  (libraries       (bigarray cstruct))
+  (c_names         (secp256k1
+                    secp256k1_wrap))
   (c_flags         (:include c_flags.sexp))
   (c_library_flags (-lgmp))))
 

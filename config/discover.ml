@@ -16,7 +16,6 @@ let symbols = [
   (if hw = "x86_64" then Some ("USE_ASM_X86_64", None) else None) ;
   Some ((if sixtyfour then "USE_SCALAR_4X64" else "USE_SCALAR_8X32"), None) ;
   Some ((if sixtyfour then "USE_FIELD_5X52" else "USE_FIELD_10X26"), None) ;
-  (* Some ("HAVE_CONFIG_H", None) ; *)
   Some ("USE_NUM_GMP", None) ;
   Some ("USE_SCALAR_INV_NUM", None) ;
   Some ("USE_FIELD_INV_NUM", None) ;
@@ -28,6 +27,8 @@ let symbols = [
   Some ("SECP256K1_TAG_PUBKEY_UNCOMPRESSED", Some "0x04") ;
   Some ("SECP256K1_TAG_PUBKEY_HYBRID_EVEN", Some "0x06") ;
   Some ("SECP256K1_TAG_PUBKEY_HYBRID_ODD", Some "0x07") ;
+
+  Some ("ENABLE_MODULE_RECOVERY", None) ;
 ]
 
 let () =
