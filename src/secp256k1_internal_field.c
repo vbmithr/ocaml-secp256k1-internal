@@ -2,6 +2,7 @@
 #include <caml/mlvalues.h>
 #include <caml/bigarray.h>
 
+#include "num_impl.h"
 #include "field_impl.h"
 
 CAMLprim value ml_secp256k1_fe_const (value r,

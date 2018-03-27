@@ -12,7 +12,7 @@
 #include <gmp.h>
 
 #include "util.h"
-#include "num_impl.h"
+#include "num.h"
 
 #ifdef VERIFY
 static void secp256k1_num_sanity(const secp256k1_num *a) {

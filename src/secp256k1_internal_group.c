@@ -8,6 +8,7 @@
 #include "scalar_impl.h"
 #include "ecmult_const_impl.h"
 #include "eckey_impl.h"
+#include "scratch_impl.h"
 
 CAMLprim value ml_secp256k1_ge_of_fields (value r, value x, value y, value infinity) {
     secp256k1_ge *g = Caml_ba_data_val(r);

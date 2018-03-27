@@ -8,7 +8,7 @@
 #define SECP256K1_GROUP_H
 
 #include "num.h"
-#include "field_impl.h"
+#include "field.h"
 
 /** A group element of the secp256k1 curve, in affine coordinates. */
 typedef struct {
@@ -78,6 +78,9 @@ static void secp256k1_ge_set_table_gej_var(secp256k1_ge *r, const secp256k1_gej 
  *  coordinates of the result are stored in r, the common z coordinate is
  *  stored in globalz. */
 static void secp256k1_ge_globalz_set_table_gej(size_t len, secp256k1_ge *r, secp256k1_fe *globalz, const secp256k1_gej *a, const secp256k1_fe *zr);
+
+/** Set a group element (affine) equal to the point at infinity. */
+static void secp256k1_ge_set_infinity(secp256k1_ge *r);
 
 /** Set a group element (jacobian) equal to the point at infinity. */
 static void secp256k1_gej_set_infinity(secp256k1_gej *r);

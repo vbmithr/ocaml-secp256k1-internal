@@ -8,7 +8,20 @@
 #define SECP256K1_SCALAR_H
 
 #include "num.h"
+
+#if defined HAVE_CONFIG_H
+#include "libsecp256k1-config.h"
+#endif
+
+#if defined(EXHAUSTIVE_TEST_ORDER)
+#include "scalar_low.h"
+#elif defined(USE_SCALAR_4X64)
 #include "scalar_4x64.h"
+#elif defined(USE_SCALAR_8X32)
+#include "scalar_8x32.h"
+#else
+#error "Please select scalar implementation"
+#endif
 
 /** Clear a scalar to prevent the leak of sensitive data. */
 static void secp256k1_scalar_clear(secp256k1_scalar *r);

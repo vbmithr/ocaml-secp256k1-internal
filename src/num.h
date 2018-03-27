@@ -7,7 +7,17 @@
 #ifndef SECP256K1_NUM_H
 #define SECP256K1_NUM_H
 
+#ifndef USE_NUM_NONE
+
+#if defined HAVE_CONFIG_H
+#include "libsecp256k1-config.h"
+#endif
+
+#if defined(USE_NUM_GMP)
 #include "num_gmp.h"
+#else
+#error "Please select num implementation"
+#endif
 
 /** Copy a number. */
 static void secp256k1_num_copy(secp256k1_num *r, const secp256k1_num *a);
@@ -58,5 +68,7 @@ static int secp256k1_num_is_neg(const secp256k1_num *a);
 
 /** Change a number's sign. */
 static void secp256k1_num_negate(secp256k1_num *r);
+
+#endif
 
 #endif /* SECP256K1_NUM_H */

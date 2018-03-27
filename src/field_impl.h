@@ -7,17 +7,28 @@
 #ifndef SECP256K1_FIELD_IMPL_H
 #define SECP256K1_FIELD_IMPL_H
 
-#include "util.h"
-#include "field_5x52_impl.h"
+#if defined HAVE_CONFIG_H
+#include "libsecp256k1-config.h"
+#endif
 
-inline static int secp256k1_fe_equal(const secp256k1_fe *a, const secp256k1_fe *b) {
+#include "util.h"
+
+#if defined(USE_FIELD_10X26)
+#include "field_10x26_impl.h"
+#elif defined(USE_FIELD_5X52)
+#include "field_5x52_impl.h"
+#else
+#error "Please select field implementation"
+#endif
+
+SECP256K1_INLINE static int secp256k1_fe_equal(const secp256k1_fe *a, const secp256k1_fe *b) {
     secp256k1_fe na;
     secp256k1_fe_negate(&na, a, 1);
     secp256k1_fe_add(&na, b);
     return secp256k1_fe_normalizes_to_zero(&na);
 }
 
-inline static int secp256k1_fe_equal_var(const secp256k1_fe *a, const secp256k1_fe *b) {
+SECP256K1_INLINE static int secp256k1_fe_equal_var(const secp256k1_fe *a, const secp256k1_fe *b) {
     secp256k1_fe na;
     secp256k1_fe_negate(&na, a, 1);
     secp256k1_fe_add(&na, b);
@@ -213,6 +224,9 @@ static void secp256k1_fe_inv(secp256k1_fe *r, const secp256k1_fe *a) {
 }
 
 static void secp256k1_fe_inv_var(secp256k1_fe *r, const secp256k1_fe *a) {
+#if defined(USE_FIELD_INV_BUILTIN)
+    secp256k1_fe_inv(r, a);
+#elif defined(USE_FIELD_INV_NUM)
     secp256k1_num n, m;
     static const secp256k1_fe negone = SECP256K1_FE_CONST(
         0xFFFFFFFFUL, 0xFFFFFFFFUL, 0xFFFFFFFFUL, 0xFFFFFFFFUL,
@@ -241,6 +255,9 @@ static void secp256k1_fe_inv_var(secp256k1_fe *r, const secp256k1_fe *a) {
     secp256k1_fe_mul(&c, &c, r);
     secp256k1_fe_add(&c, &negone);
     CHECK(secp256k1_fe_normalizes_to_zero_var(&c));
+#else
+#error "Please select field inverse implementation"
+#endif
 }
 
 static void secp256k1_fe_inv_all_var(secp256k1_fe *r, const secp256k1_fe *a, size_t len) {
