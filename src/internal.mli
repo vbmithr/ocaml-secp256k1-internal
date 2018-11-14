@@ -175,8 +175,8 @@ module Field : sig
     val of_cstruct_exn : Cstruct.t -> t
     val to_cstruct : t -> Cstruct.t
     val const :
-    ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
-    ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
+      ?d7:int64 -> ?d6:int64 -> ?d5:int64 -> ?d4:int64 ->
+      ?d3:int64 -> ?d2:int64 -> ?d1:int64 -> ?d0:int64 -> unit -> t
     val cmov : t -> t -> bool -> unit
     (** If flag is true, set *r equal to *a; otherwise leave
         it. Constant-time. *)
@@ -335,7 +335,7 @@ module Group : sig
 
     val set_infinity : t -> unit
     (** Set a group element (jacobian) equal to the point at
-       infinity. *)
+        infinity. *)
 
     val get_ge : ge -> t -> unit
     (** Set a group element equal to another which is given in jacobian
